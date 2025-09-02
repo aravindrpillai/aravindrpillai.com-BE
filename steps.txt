@@ -1,0 +1,5 @@
+pip install virtualenv
+virtualenv varp
+varp\Scripts\activate
+pip install django
+django-admin startproject arp .
