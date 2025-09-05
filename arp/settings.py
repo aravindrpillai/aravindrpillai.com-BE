@@ -1,7 +1,5 @@
 from pathlib import Path
-from dotenv import load_dotenv
 from corsheaders.defaults import default_headers
-load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-u7!c^1%+)lr%m_li4(vops!+u^hqato2zami-7+&^gj28*7)2m'
@@ -9,7 +7,7 @@ SECRET_KEY = 'django-insecure-u7!c^1%+)lr%m_li4(vops!+u^hqato2zami-7+&^gj28*7)2m
 
 DEBUG = False
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '35.182.227.27']
-CORS_ALLOWED_ORIGINS = [ "http://localhost:8080", "http://127.0.0.1:8080", "http://35.182.227.27:8080" ]
+CORS_ALLOWED_ORIGINS = [ "http://localhost", "http://127.0.0.1", "http://35.182.227.27" ]
 CORS_ALLOW_HEADERS = list(default_headers) + ['token', 'name', 'content-type']
 
 
@@ -23,9 +21,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corsheaders',
     'rest_framework',
-    'users',
-    'chat',
-    'qchat'
+    'qchat',
+    'anonymous',
+    'textbox'
 ]
 
 MIDDLEWARE = [
@@ -36,7 +34,7 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware'
 ]
 
 ROOT_URLCONF = 'arp.urls'
@@ -57,9 +55,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'arp.wsgi.application'
-
-
-AUTH_USER_MODEL = 'users.User'
 
 DATABASES = {
     'default': {
@@ -90,3 +85,11 @@ USE_I18N = True
 USE_TZ = True
 STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+import configparser
+config = configparser.ConfigParser()
+config.read("app.properties")
+
+QCHAT_PANICPW = config["qchat"]["panicpw"]
+ANONYMOUS_PW = config["anonymous"]["password"]

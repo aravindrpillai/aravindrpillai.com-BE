@@ -6,11 +6,17 @@ class QuickChat(models.Model):
     name = models.CharField(max_length=10, null=False)
     code = models.IntegerField(validators=[MinValueValidator(1000), MaxValueValidator(9999)], null=False)
     
+    class Meta:
+        db_table = "qc_chat"
+
 class Conversations(models.Model):
     qchat = models.ForeignKey(QuickChat, related_name="conversations",on_delete=models.CASCADE)
     sender = models.CharField(max_length=10, null=False)
     message = models.TextField(max_length=2000, null=False)
     time = models.DateTimeField(default=timezone.now)
+    
+    class Meta:
+        db_table = "qc_conversations"
 
     def data(self):
         return {
