@@ -6,8 +6,8 @@ SECRET_KEY = 'django-insecure-u7!c^1%+)lr%m_li4(vops!+u^hqato2zami-7+&^gj28*7)2m
 
 DEBUG = False
 
-ALLOWED_HOSTS = ["localhost"] if DEBUG else ["aravindrpillai.com", "www.aravindrpillai.com"]
-CORS_ALLOWED_ORIGINS = ["http://localhost"] if DEBUG else [ "http://aravindrpillai.com", "http://www.aravindrpillai.com"]
+ALLOWED_HOSTS = ["localhost"] if DEBUG else ['35.182.227.27', 'aravindrpillai.com', 'www.aravindrpillai.com']
+CORS_ALLOWED_ORIGINS = ["http://localhost"] if DEBUG else [ 'http://35.182.227.27', 'http://aravindrpillai.com', 'http://www.aravindrpillai.com']
 
 CORS_ALLOW_HEADERS = list(default_headers) + ['token', 'name', 'content-type']
 
