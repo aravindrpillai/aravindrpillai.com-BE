@@ -92,4 +92,5 @@ config = configparser.ConfigParser()
 config.read("app.properties")
 
 QCHAT_PANICPW = config["qchat"]["panicpw"]
+QCHAT_ENCRYPTION_IV = config["qchat"]["iv"]
 ANONYMOUS_PW = config["anonymous"]["password"]
