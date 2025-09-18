@@ -1,5 +1,47 @@
-pip install virtualenv
-virtualenv varp
-varp\Scripts\activate
-pip install django
-django-admin startproject arp .
+
+sudo su -								# Do as root user
+sudo apt update							# Update OS
+git clone https://github.com/aravindrpillai/aravindrpillai.com-BE
+sudo apt install python3-venv -y                      # Install Python
+python3 -m venv venv						# setup virtual env
+source venv/bin/activate					# activate V-Env
+pip install --upgrade pip					# Update pip
+pip3 install -r requirements.txt
+
+# below configuration add the server start to django service.
+sudo rm /etc/systemd/system/django.service  #delete the old
+sudo nano /etc/systemd/system/django.service
+
+===================FROM BELOW====================================
+[Unit]
+Description=Django Application (Gunicorn)
+After=network.target
+
+[Service]
+User=root
+Group=www-data
+WorkingDirectory=/root/aravindrpillai.com-BE
+ExecStart=/root/venv/bin/gunicorn --workers 3 --bind 0.0.0.0:80 arp.wsgi:application
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+===================TILL ABOVE====================================
+#Once pasted, press cntrl-O, then enter, then cntrl-x
+=================================================================
+
+sudo systemctl daemon-reload			# Reload the daemons
+sudo systemctl restart django
+sudo systemctl status django
+sudo systemctl enable django.service 	# This is auto start the django app when server is restarted
+
+
+journalctl -u django					# to see the logs
+
+
+=============== GIT RESET AND PULL ==============================
+git fetch origin
+git reset --hard origin/main
+git clean -fd
+git pull
+=================================================================
