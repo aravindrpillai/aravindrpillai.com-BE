@@ -22,7 +22,7 @@ class RequestInfo:
                 return {
                     "ip": ip,
                     "city": f"{response.get('city')}, {response.get('regionName')}, {response.get('country')}",
-                    "cordinates": f"{response.get('lat')},{response.get("lon")}",
+                    "cordinates": f"{response.get('lat')},{response.get('lon')}",
                     "isp": response.get("isp")
                 }
             else:

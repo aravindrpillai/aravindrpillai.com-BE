@@ -9,10 +9,7 @@ class QchatConfig(AppConfig):
     def ready(self):
         from .models import QuickChat
         try:
-            QuickChat.objects.get_or_create(name="marks", code=2808 )
-            QuickChat.objects.get_or_create(name="chela", code=9001 )
-            QuickChat.objects.get_or_create(name="res", code=1104 )
-            QuickChat.objects.get_or_create(name="gop", code=2205 )
+            QuickChat.objects.get_or_create(name="test", code=1234 )
 
         except (OperationalError, ProgrammingError):
             # Happens before the first migration
