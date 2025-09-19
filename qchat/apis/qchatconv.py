@@ -32,6 +32,8 @@ class QChatConvAPI(APIView):
     def delete(self, request):
         try:
             deleted_count, _ = request.qc.conversations.all().delete()
+            request.qc.incorrect_pw_count = 0
+            request.qc.save()
             return HttpUtil.respond(200, f"Deleted : {deleted_count}", None)
         except Exception as e:
             HttpUtil.respond(400, "Error", str(e))

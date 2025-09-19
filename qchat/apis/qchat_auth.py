@@ -20,11 +20,18 @@ class QChatAuthentication(BaseAuthentication):
                 return AuthenticationFailed(f"Invalid name/code. (Deleted : {deleted_count})")
             else:
                 qc = QuickChat.objects.get(name=name)
+                if(qc.incorrect_pw_count > 4):
+                    deleted_count, _ = qc.conversations.all().delete()
+                    raise AuthenticationFailed("Locked. (E004)")
+                
                 decryptedCode = self.decrypt_from_react(token, str(qc.code))
                 if str(qc.code) != decryptedCode:
-                    raise AuthenticationFailed("Invalid name/code. (E004)")
+                    qc.incorrect_pw_count = (qc.incorrect_pw_count + 1)
+                    qc.save()
+                    raise AuthenticationFailed("Invalid name/code. (E005)")
+                
         except QuickChat.DoesNotExist:
-            raise AuthenticationFailed("Invalid name/code. (E005)")
+            raise AuthenticationFailed("Invalid name/code. (E006)")
         request.qc = qc
         return (qc, None)
 

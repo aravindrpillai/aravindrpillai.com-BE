@@ -39,6 +39,7 @@ class QuickChatAdminAPI(APIView):
                 
             if code:
                 chat.code = int(code)
+                chat.incorrect_pw_count = 0
                 chat.save()
             return HttpUtil.respond(200, "Code Updated Successfully")
         except Exception as e:
