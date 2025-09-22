@@ -45,3 +45,15 @@ git reset --hard origin/main
 git clean -fd
 git pull
 =================================================================
+
+SQL:
+sudo apt update
+sudo apt install sqlite3
+sqlite3 db.sqlite #go to the place wr we have the db and do
+	.headers on		-- Show table headers
+	.mode box		-- show as table
+	.tables;         	-- Show all tables
+	.schema table1;  	-- Show schema of a table
+	SELECT * FROM table1; 	-- Query data
+	CNTRL + D 		-- EXIT
+
