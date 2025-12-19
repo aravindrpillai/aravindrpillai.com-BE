@@ -1,5 +1,6 @@
 from rest_framework.authentication import BaseAuthentication
 from rest_framework.exceptions import AuthenticationFailed
+from util.encryption import Encryption
 from django.conf import settings
 from ..models import QuickChat
 from Crypto.Cipher import AES
@@ -11,6 +12,7 @@ class QChatAuthentication(BaseAuthentication):
     def authenticate(self, request):
         token = request.headers.get("token")
         name = request.headers.get("name")
+        
         if not token or token == "" or token == None or not name:
             raise AuthenticationFailed("Authorization info missing (E003)")
         try:
@@ -24,7 +26,11 @@ class QChatAuthentication(BaseAuthentication):
                     deleted_count, _ = qc.conversations.all().delete()
                     raise AuthenticationFailed("Locked. (E004)")
                 
-                decryptedCode = self.decrypt_from_react(token, str(qc.code))
+                #If in debug mode, we can pass plain code, else emcrypted token is required
+                if settings.DEBUG:
+                    token = Encryption.encrypt(token, str(qc.code))
+                
+                decryptedCode = Encryption.decrypt(token, str(qc.code))
                 if str(qc.code) != decryptedCode:
                     qc.incorrect_pw_count = (qc.incorrect_pw_count + 1)
                     qc.save()
@@ -32,16 +38,7 @@ class QChatAuthentication(BaseAuthentication):
                 
         except QuickChat.DoesNotExist:
             raise AuthenticationFailed("Invalid name/code. (E006)")
+        except Exception:
+            raise AuthenticationFailed("Invalid token code")
         request.qc = qc
         return (qc, None)
-
-    
-    def decrypt_from_react(self, cipherdCode, code):
-        IV = settings.QCHAT_ENCRYPTION_IV.encode("utf-8")
-        key = hashlib.sha256(code.encode()).digest()
-        raw = base64.b64decode(cipherdCode)
-        cipher = AES.new(key, AES.MODE_CBC, IV)
-        decrypted = cipher.decrypt(raw)
-        pad_len = decrypted[-1]
-        decrypted = decrypted[:-pad_len]
-        return decrypted.decode("utf-8")

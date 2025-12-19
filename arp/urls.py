@@ -3,11 +3,19 @@ from qchat.apis.qchatconv import QChatConvAPI
 from qchat.apis.qchat_admin import QuickChatAdminAPI
 from anonymous.api import AnonymousAPI
 from textbox.api import TextBoxAPI
+from django.http import JsonResponse
+from django.views import View
+
+class PingAPI(View):
+    def get(self, request):
+        return JsonResponse({"status": "ok", "message": "App is up and running" })
+
 
 urlpatterns = [
+    path("ping/", PingAPI.as_view(), name="ping"),
+
     #Quick Chat Conversations
     path("arp/qchat/conversations/", QChatConvAPI.as_view(), name="quick-chat-conversations"),
-    path("arp/qchat/admin/<str:name>/", QuickChatAdminAPI.as_view(), name="quick-chat-admin-api"),
     path("arp/qchat/admin/", QuickChatAdminAPI.as_view(), name="quick-chat-admin-api"),
 
     #Anoymous

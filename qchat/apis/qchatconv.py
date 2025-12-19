@@ -13,7 +13,6 @@ class QChatConvAPI(APIView):
             convs = request.user.conversations.filter(id__gt=lastid).order_by("id")
             return HttpUtil.respond(200, None, [c.data() for c in convs])
         except Exception as e:
-            print(str(e))
             return HttpUtil.respond(400, "Error", str(e))
 
     def post(self, request):

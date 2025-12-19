@@ -1,4 +1,5 @@
 from rest_framework.exceptions import AuthenticationFailed
+from util.encryption import Encryption
 from util.http_util import HttpUtil
 from rest_framework.views import APIView
 from ..models import QuickChat
@@ -23,25 +24,27 @@ class QuickChatAdminAPI(APIView):
             if QuickChat.objects.filter(name=name).exists():
                 return HttpUtil.respond(400, "Record with this name already exists", None)
             QuickChat.objects.create(name=name, code=int(code))
-            return HttpUtil.respond(200, "Record created successfully")
+            encrypted_code = Encryption.encrypt(code, code)
+            return HttpUtil.respond(200, "Record created successfully", {code : encrypted_code})
         except Exception as e:
             return HttpUtil.respond(400, "Failed to add", e)
 
         
     # Update
-    def put(self, request, name):
+    def put(self, request):
         try:
             data = request.data
+            name = data.get("name")
             code = data.get("code")
-
             chat = QuickChat.objects.get(name=name)
             deleted_count, _ = chat.conversations.all().delete()
-                
             if code:
                 chat.code = int(code)
                 chat.incorrect_pw_count = 0
                 chat.save()
-            return HttpUtil.respond(200, "Code Updated Successfully")
+            
+            encrypted_code = Encryption.encrypt(code, code)
+            return HttpUtil.respond(200, "Code Updated Successfully", {code : encrypted_code})
         except Exception as e:
             return HttpUtil.respond(400, "Failed to update", e)
 

@@ -7,17 +7,19 @@ SECRET_KEY = 'django-insecure-u7!c^1%+)lr%m_li4(vops!+u^hqato2zami-7+&^gj28*7)2m
 DEBUG = False
 
 ALLOWED_HOSTS = [
+    '149.248.57.227', # BackEnd
+    '155.138.159.42', # FrontEnd
     '127.0.0.1', 
     'localhost', 
-    '15.222.9.174', 
     'be.aravindrpillai.com', 
     'aravindrpillai.com', 
     'www.aravindrpillai.com'
 ]
 CORS_ALLOWED_ORIGINS = [
+    'http://149.248.57.227', # BackEnd
+    'http://155.138.159.42', # FrontEnd
     'http://127.0.0.1', 
     'http://localhost', 
-    'http://15.222.9.174', 
     'http://be.aravindrpillai.com', 
     'http://aravindrpillai.com', 
     'http://www.aravindrpillai.com'

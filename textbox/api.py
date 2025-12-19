@@ -23,3 +23,10 @@ class TextBoxAPI(APIView):
         tb.content = content
         tb.save()
         return HttpUtil.respond(200, "Success", None)
+    
+    
+    def delete(self, request, code=None):
+        Textbox.objects.all().delete()
+        return HttpUtil.respond(200, "Success", None)
+    
+    
