@@ -8,19 +8,17 @@ DEBUG = False
 
 ALLOWED_HOSTS = [
     '149.248.57.227', # BackEnd
-    '155.138.159.42', # FrontEnd
+    '216.128.176.119', # FrontEnd
     '127.0.0.1', 
     'localhost', 
-    'be.aravindrpillai.com', 
     'aravindrpillai.com', 
     'www.aravindrpillai.com'
 ]
 CORS_ALLOWED_ORIGINS = [
     'http://149.248.57.227', # BackEnd
-    'http://155.138.159.42', # FrontEnd
+    'http://216.128.176.119', # FrontEnd
     'http://127.0.0.1', 
-    'http://localhost', 
-    'http://be.aravindrpillai.com', 
+    'http://localhost',  
     'http://aravindrpillai.com', 
     'http://www.aravindrpillai.com'
 ]
