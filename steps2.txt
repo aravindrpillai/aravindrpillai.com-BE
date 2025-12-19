@@ -1,0 +1,85 @@
+apt update && apt upgrade -y
+
+Instll 
+    apt install -y python3 python3-venv python3-pip git nginx ufw
+
+
+Verify:
+    python3 --version
+    nginx -v
+
+Create project directory
+    mkdir -p /root/myproject
+    cd /root/myproject
+
+Get your Django code
+    git clone <REPO_URL> .
+
+Create virtual environment
+    python3 -m venv /root/venv
+
+Activate venv
+    source /root/venv/bin/activate
+
+Verify:
+    which python
+    #OP should be:  /root/venv/bin/python
+
+Install dependencies
+    pip install --upgrade pip
+    pip install -r requirements.txt
+    pip install django gunicorn
+    pip freeze > requirements.txt
+
+Edit settings.py
+    nano <project>/settings.py
+    #and configure the allowed host and cors and DEBUG = False
+
+Run migrations
+    python manage.py migrate
+
+Test locally (DO NOT SKIP)
+    python manage.py runserver 0.0.0.0:8000
+    curl http://127.0.0.1:8000/
+
+
+now stop server:
+CTRL + C
+
+GUNICORN (APP SERVER)
+    nano /etc/systemd/system/django.service
+
+Paste below:
+
+[Unit]
+Description=Django Application (Gunicorn)
+After=network.target
+
+[Service]
+User=root
+Group=www-data
+WorkingDirectory=/root/myproject
+ExecStart=/root/venv/bin/gunicorn \
+    --workers 3 \
+    --bind 127.0.0.1:8000 \
+    <project>.wsgi:application
+
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+
+Start Gunicorn
+systemctl daemon-reload
+systemctl enable django
+systemctl restart django
+systemctl status django
+
+
+After opening the port:
+    ufw status
+        # check if 80 is open - if NOT
+    ufw allow 80/tcp
+    ufw reload
+        #then again
+    ufw status
