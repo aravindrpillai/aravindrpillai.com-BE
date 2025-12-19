@@ -3,8 +3,6 @@ from rest_framework.exceptions import AuthenticationFailed
 from util.encryption import Encryption
 from django.conf import settings
 from ..models import QuickChat
-from Crypto.Cipher import AES
-import base64, hashlib
 
 
 class QChatAuthentication(BaseAuthentication):

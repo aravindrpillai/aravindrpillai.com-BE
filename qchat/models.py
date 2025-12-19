@@ -6,7 +6,10 @@ class QuickChat(models.Model):
     name = models.CharField(max_length=10, null=False, unique=True)
     code = models.IntegerField(validators=[MinValueValidator(1000), MaxValueValidator(9999)], null=False)
     incorrect_pw_count = models.IntegerField(default=0)
-
+    emails = models.JSONField(max_length=200, null=True)
+    last_email_time = models.DateTimeField(null=True)
+    last_email_send_by = models.CharField(max_length=10, null=True) #keeping for future
+    
     class Meta:
         db_table = "qc_chat"
 

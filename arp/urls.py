@@ -8,8 +8,12 @@ from django.views import View
 
 class PingAPI(View):
     def get(self, request):
-        return JsonResponse({"status": "ok", "message": "App is up and running" })
-
+        try:
+            from util.communication_util import CommunicationUtil
+            CommunicationUtil.email(["aravind.ramachandran.pillai@gmail.com"], "App is up and running","<EOM>")
+            return JsonResponse({"status": "ok", "message": "App is up and running" })
+        except Exception as e:
+            return JsonResponse({"status": "ok", "message": f"App is up and running - but email failed : {str(e)}" })
 
 urlpatterns = [
     path("ping/", PingAPI.as_view(), name="ping"),

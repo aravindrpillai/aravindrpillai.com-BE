@@ -1,18 +1,45 @@
+Update OS and Install necessary libs
+    apt update && apt upgrade -y
+    apt install -y python3 python3-venv python3-pip git nginx ufw
 
-sudo su -								# Do as root user
-sudo apt update							# Update OS
-git clone https://github.com/aravindrpillai/aravindrpillai.com-BE
-sudo apt install python3-venv -y                      # Install Python
-python3 -m venv venv						# setup virtual env
-source venv/bin/activate					# activate V-Env
-pip install --upgrade pip					# Update pip
-pip3 install -r requirements.txt
+Get the code
+    git clone https://github.com/aravindrpillai/aravindrpillai.com-BE.git .
 
-# below configuration add the server start to django service.
-sudo rm /etc/systemd/system/django.service  #delete the old
-sudo nano /etc/systemd/system/django.service
+Create virtual environment
+    python3 -m venv /root/venv
 
-===================FROM BELOW====================================
+Activate venv
+    source /root/venv/bin/activate
+
+Verify:
+    which python
+    #OP should be:  /root/venv/bin/python
+
+Install dependencies
+    pip install --upgrade pip
+    pip install -r requirements.txt
+    pip install django gunicorn
+    pip freeze > requirements.txt
+
+Edit settings.py
+    nano <project>/settings.py
+    #and configure the allowed host and cors and DEBUG = False
+
+Run migrations
+    python manage.py migrate
+
+Test locally (DO NOT SKIP)
+    python manage.py runserver 0.0.0.0:8000
+    curl http://127.0.0.1:8000/
+And if it works, stop server which we ran using above command:
+    CTRL + C
+
+Configure GUNICORN (APP SERVER)
+Open django service    
+    nano /etc/systemd/system/django.service
+
+Paste below:
+-------------DONT TAKE THIS LINE-----------------------------------------
 [Unit]
 Description=Django Application (Gunicorn)
 After=network.target
@@ -20,40 +47,32 @@ After=network.target
 [Service]
 User=root
 Group=www-data
-WorkingDirectory=/root/aravindrpillai.com-BE
-ExecStart=/root/venv/bin/gunicorn --workers 3 --bind 0.0.0.0:80 arp.wsgi:application
+WorkingDirectory=/root/myproject
+ExecStart=/root/venv/bin/gunicorn \
+    --workers 3 \
+    --bind 127.0.0.1:8000 \
+    <project>.wsgi:application
+
 Restart=always
 
 [Install]
 WantedBy=multi-user.target
-===================TILL ABOVE====================================
-#Once pasted, press cntrl-O, then enter, then cntrl-x
-=================================================================
-
-sudo systemctl daemon-reload			# Reload the daemons
-sudo systemctl restart django
-sudo systemctl status django
-sudo systemctl enable django.service 	# This is auto start the django app when server is restarted
+-------------DONT TAKE THIS LINE-----------------------------------------
 
 
-journalctl -u django					# to see the logs
+
+Start Gunicorn
+    systemctl daemon-reload
+    systemctl enable django
+    systemctl restart django
+    systemctl status django
 
 
-=============== GIT RESET AND PULL ==============================
-git fetch origin
-git reset --hard origin/main
-git clean -fd
-git pull
-=================================================================
-
-SQL:
-sudo apt update
-sudo apt install sqlite3
-sqlite3 db.sqlite #go to the place wr we have the db and do
-	.headers on		-- Show table headers
-	.mode box		-- show as table
-	.tables;         	-- Show all tables
-	.schema table1;  	-- Show schema of a table
-	SELECT * FROM table1; 	-- Query data
-	CNTRL + D 		-- EXIT
-
+After opening the port in AWS of Vultr:
+1. check if 80 is open
+        ufw status
+2. If not do the below    
+    ufw allow 80/tcp
+    ufw reload
+3. then check the status again
+    ufw status

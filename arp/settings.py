@@ -109,3 +109,20 @@ QCHAT_ADMIN_PW = config["qchat"]["adminpassword"]
 QCHAT_PANICPW = config["qchat"]["panicpw"]
 QCHAT_ENCRYPTION_IV = config["qchat"]["iv"]
 ANONYMOUS_PW = config["anonymous"]["password"]
+
+EMAIL_ACCOUNTS = {
+    "default": {
+        "HOST": "smtp.gmail.com",
+        "PORT": 587,
+        "USE_TLS": True,
+        "USER": config["email"]["email"],
+        "PASSWORD": config["email"]["password"],
+    },
+    "qchat": {
+        "HOST": "smtp.gmail.com",
+        "PORT": 587,
+        "USE_TLS": True,
+        "USER": config["qchat"]["email"],
+        "PASSWORD": config["qchat"]["password"],
+    }
+}

@@ -19,11 +19,12 @@ class QuickChatAdminAPI(APIView):
             data = request.data
             name = data.get("name")
             code = data.get("code")
+            emails = data.get("emails",[])
             if not name or not code:
                 return HttpUtil.respond(400, "Both 'name' and 'code' are required", None)
             if QuickChat.objects.filter(name=name).exists():
                 return HttpUtil.respond(400, "Record with this name already exists", None)
-            QuickChat.objects.create(name=name, code=int(code))
+            QuickChat.objects.create(name=name, code=int(code), emails=emails)
             encrypted_code = Encryption.encrypt(code, code)
             return HttpUtil.respond(200, "Record created successfully", {code : encrypted_code})
         except Exception as e:
@@ -36,10 +37,13 @@ class QuickChatAdminAPI(APIView):
             data = request.data
             name = data.get("name")
             code = data.get("code")
+            emails = data.get("emails",[])
+            
             chat = QuickChat.objects.get(name=name)
             deleted_count, _ = chat.conversations.all().delete()
             if code:
                 chat.code = int(code)
+                chat.emails = emails if emails else []
                 chat.incorrect_pw_count = 0
                 chat.save()
             
