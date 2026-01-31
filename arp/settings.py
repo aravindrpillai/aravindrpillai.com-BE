@@ -12,8 +12,8 @@ ALLOWED_HOSTS = [
     '216.128.180.248', # FrontEnd - New
     '127.0.0.1', 
     'localhost', 
-    'aravindrpillai.com', 
-    'www.aravindrpillai.com'
+    'aravindpillai.com', 
+    'www.aravindpillai.com'
 ]
 CORS_ALLOWED_ORIGINS = [
     'http://149.248.57.227', # BackEnd
@@ -21,8 +21,8 @@ CORS_ALLOWED_ORIGINS = [
     'http://216.128.180.248', # FrontEnd - New
     'http://127.0.0.1', 
     'http://localhost',  
-    'http://aravindrpillai.com', 
-    'http://www.aravindrpillai.com'
+    'http://aravindpillai.com', 
+    'http://www.aravindpillai.com'
 ]
 
 CORS_ALLOW_HEADERS = list(default_headers) + ['token', 'name', 'content-type']
