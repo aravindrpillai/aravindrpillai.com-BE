@@ -29,8 +29,8 @@ Run migrations
     python manage.py migrate
 
 Test locally (DO NOT SKIP)
-    python manage.py runserver 0.0.0.0:8000
-    curl http://127.0.0.1:8000/
+    python manage.py runserver 0.0.0.0:80
+    curl http://127.0.0.1:80/ping
 And if it works, stop server which we ran using above command:
     CTRL + C
 
@@ -47,13 +47,13 @@ After=network.target
 [Service]
 User=root
 Group=www-data
-WorkingDirectory=/root/myproject
-ExecStart=/root/venv/bin/gunicorn \
-    --workers 3 \
-    --bind 127.0.0.1:8000 \
-    <project>.wsgi:application
+WorkingDirectory=/root/aravindrpillai.com-BE
+
+Environment="PATH=/root/aravindrpillai.com-BE/.venv/bin"
+ExecStart=/root/aravindrpillai.com-BE/.venv/bin/gunicorn --workers 3 --bind 0.0.0.0:80 arp.wsgi:application
 
 Restart=always
+RestartSec=5
 
 [Install]
 WantedBy=multi-user.target
