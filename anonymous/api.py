@@ -3,6 +3,7 @@ from util.http_util import HttpUtil
 from rest_framework.views import APIView
 from util.request_util import RequestInfo
 from .auth import AnonymousChatAuthentication
+from util.communication_util import CommunicationUtil
 
 class AnonymousAPI(APIView):
     
@@ -28,6 +29,8 @@ class AnonymousAPI(APIView):
                 ip=loc_info.get("ip"),
                 isp=loc_info.get("isp"),
             )
+
+            CommunicationUtil.email(["aravindrpillai1992@gmail.com"], "Anonymous Notification", None, False)
             return HttpUtil.respond(200, "Success", None)
         except Exception as e:
             return HttpUtil.respond(400, "Error", str(e))
