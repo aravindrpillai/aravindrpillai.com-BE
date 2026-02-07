@@ -20,6 +20,7 @@ urlpatterns = [
 
     #Quick Chat Conversations
     path("arp/qchat/conversations/", QChatConvAPI.as_view(), name="quick-chat-conversations"),
+    path("arp/qchat/conversations/delete/<int:conversation_id>/", QChatConvAPI.as_view(), name="quick-chat-conversations-delete"),
     path("arp/qchat/admin/", QuickChatAdminAPI.as_view(), name="quick-chat-admin-api"),
 
     #Anoymous

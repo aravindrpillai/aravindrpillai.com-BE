@@ -1,5 +1,11 @@
+import os
 from pathlib import Path
 from corsheaders.defaults import default_headers
+
+import configparser
+config = configparser.ConfigParser()
+config.read("app.properties")
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-u7!c^1%+)lr%m_li4(vops!+u^hqato2zami-7+&^gj28*7)2m'
@@ -73,9 +79,19 @@ TEMPLATES = [
 WSGI_APPLICATION = 'arp.wsgi.application'
 
 DATABASES = {
-    'default': {
+    'sqllite': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+    },
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": config["database"]["dbname"],
+        "USER": config["database"]["username"],
+        "PASSWORD": config["database"]["password"],
+        "HOST": config["database"]["host"],
+        "PORT": config["database"]["port"],
+        "CONN_MAX_AGE": 60,
+        "OPTIONS": {"sslmode": "require"}
     }
 }
 
@@ -102,10 +118,6 @@ USE_TZ = True
 STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
-import configparser
-config = configparser.ConfigParser()
-config.read("app.properties")
 
 QCHAT_ADMIN_PW = config["qchat"]["adminpassword"]
 QCHAT_PANICPW = config["qchat"]["panicpw"]
